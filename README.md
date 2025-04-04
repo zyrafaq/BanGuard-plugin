@@ -5,3 +5,6 @@ A powerful API designed for Terraria server administrators to enhance community 
 
 ## Instalation
 To install grab the `.dll` file from the [latest release](https://github.com/BanGuard-TShock/plugin/releases/latest) and put it into the `ServerPlugins` folder in your TShock folder.
+
+## Building
+Clone the repository and run the `dotnet build` command.
