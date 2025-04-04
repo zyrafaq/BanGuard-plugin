@@ -12,4 +12,6 @@ To install grab the `.dll` file from the [latest release](https://github.com/Ban
 
 ## Building
 
-Clone the repository and run the `dotnet build` command.
+1. Install [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
+2. Clone the repository with your preferred method.
+3. Run the `dotnet build` command.
