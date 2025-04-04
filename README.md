@@ -1,4 +1,6 @@
-<center><img src="https://github.com/BanGuard-TShock/plugin/blob/main/logo.png?raw=true" alt="alt text" height="120px"></center>
+<p align="center">
+  <img src="https://github.com/BanGuard-TShock/plugin/blob/main/logo.png?raw=true" alt="alt text" height="120px">
+</p>
 
 # BanGuard [TShock](https://github.com/Pryaxis/TShock) Plugin
 
