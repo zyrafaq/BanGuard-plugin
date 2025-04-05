@@ -28,7 +28,7 @@ public static class Handlers
     private static void OnReload(ReloadEventArgs args)
     {
         BanGuard.Config = Configuration.Reload();
-
+        APIService.Initialize();
         args.Player.SendSuccessMessage("[BanGuard] Plugin has been reloaded.");
     }
 

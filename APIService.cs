@@ -9,14 +9,21 @@ public static class APIService
 {
     private static readonly HttpClient _client = new HttpClient();
     private static string _apiKey => BanGuard.Config.APIKey;
+    private static bool _isApiKeyValid = false;
     private static readonly string _rootURL = "https://banguard.uk/api/";
     private static HttpRequestMessage _generateMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "generate-connection-code");
     private static HttpRequestMessage _newConnectionMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "new-connection-code");
     private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-ban");
+    private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
 
-
-    private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null)
+    private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true)
     {
+        if (checkToken && !_isApiKeyValid)
+        {
+            TShock.Log.ConsoleError("BanGuard API key is not valid. Please check your configuration.");
+            return null;
+        }
+
         _client.DefaultRequestHeaders.Clear();
         _client.DefaultRequestHeaders.Add("Authorization", _apiKey);
 
@@ -35,6 +42,31 @@ public static class APIService
         return jsonResponse;
     }
 
+    public static void Initialize()
+    {
+        Task.Run(async () =>
+        {
+            _isApiKeyValid = await CheckToken();
+
+            if (!_isApiKeyValid)
+            {
+                TShock.Log.ConsoleError($"Error validating BanGuard API key. Please check your configuration.");
+            }
+        });
+    }
+
+    public static async Task<bool> CheckToken()
+    {
+        try
+        {
+            JObject? response = await SendApiRequest(_tokenMessage, checkToken: false);
+            return response!["valid"]!.ToObject<bool>();
+        }
+        catch
+        {
+            return false;
+        }
+    }
 
     public static async Task<bool?> CheckPlayerBan(string uuid, string playerName, string playerIP)
     {

@@ -19,6 +19,7 @@ public class BanGuard : TerrariaPlugin
         Instance = this;
         Commands.Initialize();
         Handlers.Initialize();
+        APIService.Initialize();
     }
 
     protected override void Dispose(bool disposing)
