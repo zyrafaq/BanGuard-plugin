@@ -15,6 +15,8 @@ public static class APIService
     private static HttpRequestMessage _newConnectionMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "new-connection-code");
     private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-ban");
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
+    private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
+
 
     private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true)
     {
@@ -122,6 +124,27 @@ public static class APIService
         {
             TShock.Log.ConsoleError($"Error generating connection code: {ex.Message}");
             return null;
+        }
+    }
+
+    public static async Task<bool> BanPlayer(string uuid, string category, string ip)
+    {
+        var requestData = new Dictionary<string, string>
+            {
+                { "player", uuid },
+                { "category", category },
+                { "player_ip", ip }
+            };
+
+        try
+        {
+            JObject? response = await SendApiRequest(_banMessage, requestData);
+            return response != null;
+        }
+        catch (Exception ex)
+        {
+            TShock.Log.ConsoleError($"Error banning player: {ex.Message}");
+            return false;
         }
     }
 }

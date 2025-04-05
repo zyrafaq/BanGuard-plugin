@@ -11,6 +11,13 @@ public static class Commands
             AllowServer = false,
             HelpText = "Generates a connection code for linking your account."
         });
+
+        Command? banCmd = TShockAPI.Commands.ChatCommands.Find(c => c.Name == "ban");
+
+        if (banCmd != null)
+        {
+            banCmd.CommandDelegate = BanService.Ban;
+        }
     }
 
     private static async void ConnectCmd(CommandArgs args)
