@@ -6,7 +6,11 @@ public static class Commands
 {
     public static void Initialize()
     {
-        TShockAPI.Commands.ChatCommands.Add(new Command("banguard.connect", ConnectCmd, "connect", "link"));
+        TShockAPI.Commands.ChatCommands.Add(new Command("banguard.connect", ConnectCmd, "connect", "link")
+        {
+            AllowServer = false,
+            HelpText = "Generates a connection code for linking your account."
+        });
     }
 
     private static async void ConnectCmd(CommandArgs args)
