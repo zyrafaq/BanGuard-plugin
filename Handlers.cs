@@ -8,36 +8,21 @@ public static class Handlers
 {
     public static void Initialize()
     {
-        if (BanGuard.Config.CheckPlayerBanOnJoin)
-        {
-            ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
-        }
-
+        ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
         ServerApi.Hooks.ServerJoin.Register(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent += OnReload;
     }
 
     public static void Dispose()
     {
-        if (!BanGuard.Config.CheckPlayerBanOnJoin)
-        {
-            ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
-        }
-
+        ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
         ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent -= OnReload;
     }
 
     public static void Reload()
     {
-        if (BanGuard.Config.CheckPlayerBanOnJoin)
-        {
-            ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
-        }
-        else
-        {
-            ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
-        }
+        ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
     }
 
     private static void OnReload(ReloadEventArgs args)
@@ -59,11 +44,11 @@ public static class Handlers
         int prevState = player.State;
         player.State = 0;
 
-        bool isBanned = await APIService.CheckPlayerBan(player.UUID, player.Name) ?? false;
+        bool isBanned = await APIService.CheckPlayerBan(player.UUID, player.Name, player.IP) ?? false;
 
         if (isBanned)
         {
-            player.Disconnect("You are banned on the BanGuard network. Visit https://banguard.uk for more details.");
+            player.Disconnect("You are banned on the BanGuard network.\nVisit https://banguard.uk for more details.");
         }
         else
         {
@@ -78,6 +63,6 @@ public static class Handlers
         var player = TShock.Players[args.Who];
         if (player == null) return;
 
-        player.SendInfoMessage(BanGuard.Config.ServerJoinMessage);
+        player.SendInfoMessage("This server is powered by BanGuard.");
     }
 }

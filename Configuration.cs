@@ -7,8 +7,6 @@ public class Configuration
 {
     public static readonly string ConfigPath = Path.Combine(TShock.SavePath, "BanGuardConfig.json");
     public string APIKey = "paste_your_api_key_here";
-    public bool CheckPlayerBanOnJoin = true;
-    public string ServerJoinMessage = "This server is powered by BanGuard.";
 
     public void Write()
     {

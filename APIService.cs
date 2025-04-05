@@ -36,12 +36,13 @@ public static class APIService
     }
 
 
-    public static async Task<bool?> CheckPlayerBan(string uuid, string playerName)
+    public static async Task<bool?> CheckPlayerBan(string uuid, string playerName, string playerIP)
     {
         var requestData = new Dictionary<string, string>
             {
                 { "player_uuid", uuid },
-                { "player_name", playerName }
+                { "player_name", playerName },
+                { "player_ip", playerIP}
             };
 
         try
