@@ -1,6 +1,8 @@
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
+using System.Text;
+using System.Security.Cryptography;
 
 namespace BanGuard;
 
@@ -44,7 +46,10 @@ public static class Handlers
         int prevState = player.State;
         player.State = 0;
 
-        bool isBanned = await APIService.CheckPlayerBan(player.UUID, player.Name, player.IP) ?? false;
+        byte[] buffer = Encoding.UTF8.GetBytes(player.IP);
+        byte[] hashBytes = SHA256.HashData(buffer);
+        string IPhash = Convert.ToHexString(hashBytes);
+        bool isBanned = await APIService.CheckPlayerBan(player.UUID, player.Name, IPhash) ?? false;
 
         if (isBanned)
         {
