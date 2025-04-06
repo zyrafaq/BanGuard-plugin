@@ -1,8 +1,7 @@
 using Microsoft.Xna.Framework;
 using TShockAPI;
 using TShockAPI.DB;
-using System.Text;
-using System.Security.Cryptography;
+
 
 namespace BanGuard;
 
@@ -271,10 +270,7 @@ public static class BanService
 
         if (category != null)
         {
-            byte[] buffer = Encoding.UTF8.GetBytes(player.IP);
-            byte[] hashBytes = SHA256.HashData(buffer);
-            string hash = Convert.ToHexString(hashBytes);
-            _ = APIService.BanPlayer(player.UUID, category, hash);
+            _ = APIService.BanPlayer(player.UUID, category, player.IP);
             player.Disconnect(($"You have been banned on the BanGuard network for {category}."));
         }
         else if (banResult?.Ban != null)
