@@ -26,7 +26,10 @@ public static class Commands
 
         if (code != null)
         {
-            args.Player.SendSuccessMessage($"Your connection code is: {code}\nGo to https://banguard.uk/link/ to link your account.");
+            args.Player.SendSuccessMessage($"Your connection code is: {code}\n" +
+                "Go to https://banguard.uk/link/ to link your account.\n" +
+                "After completing the linking process, you must rejoin the server."
+            );
         }
         else
         {
