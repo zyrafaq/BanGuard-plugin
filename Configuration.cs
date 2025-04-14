@@ -7,7 +7,8 @@ public class Configuration
 {
     public static readonly string ConfigPath = Path.Combine(TShock.SavePath, "BanGuardConfig.json");
     public string APIKey = "paste_your_api_key_here";
-    public List<string> ConnectedPlayerPermissions = new List<string>() { "tshock.world.modify" };
+    public bool EnableDiscordConnection = true;
+    public string[] ConnectedPlayerPermissions = { };
 
     public void Write()
     {

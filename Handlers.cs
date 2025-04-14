@@ -1,5 +1,6 @@
 using TerrariaApi.Server;
 using TShockAPI;
+using TShockAPI.DB;
 using TShockAPI.Hooks;
 
 namespace BanGuard;
@@ -9,9 +10,13 @@ public static class Handlers
     public static void Initialize()
     {
         ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
-        ServerApi.Hooks.ServerJoin.Register(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent += OnReload;
-        PlayerHooks.PlayerPermission += OnPlayerPermission;
+
+        if (BanGuard.Config.EnableDiscordConnection)
+        {
+            ServerApi.Hooks.ServerJoin.Register(BanGuard.Instance, OnServerJoin);
+            PlayerHooks.PlayerPermission += OnPlayerPermission;
+        }
     }
 
     public static void Dispose()
@@ -19,12 +24,22 @@ public static class Handlers
         ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
         ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent -= OnReload;
-        PlayerHooks.PlayerPermission -= OnPlayerPermission;
     }
 
     public static void Reload()
     {
         ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
+
+        if (BanGuard.Config.EnableDiscordConnection)
+        {
+            ServerApi.Hooks.ServerJoin.Register(BanGuard.Instance, OnServerJoin);
+            PlayerHooks.PlayerPermission += OnPlayerPermission;
+        }
+        else
+        {
+            ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
+            PlayerHooks.PlayerPermission -= OnPlayerPermission;
+        }
     }
 
     private static void OnReload(ReloadEventArgs args)
@@ -75,10 +90,7 @@ public static class Handlers
 
     private static void OnPlayerPermission(PlayerPermissionEventArgs e)
     {
-        if (!e.Player.IsLoggedIn)
-        {
-            return;
-        }
+        if (!e.Player.IsLoggedIn) return;
 
         if (e.Player.GetDiscordAccount() != null && BanGuard.Config.ConnectedPlayerPermissions.Contains(e.Permission))
         {

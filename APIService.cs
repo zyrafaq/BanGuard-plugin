@@ -148,7 +148,7 @@ public static class APIService
         }
     }
 
-    public static async Task<DCAccount?> TryGetDiscordAccount(string uuid, string name)
+    public static async Task<DCAccount?> TryGetDiscordAccount(string uuid)
     {
         var requestData = new Dictionary<string, string>
             {
