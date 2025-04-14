@@ -148,22 +148,21 @@ public static class APIService
         }
     }
 
-    public static async Task<DCAccount?> TryGetDiscordAccount(string uuid)
+    public static async Task<DCAccount?> TryGetDiscordAccount(string uuid, string name)
     {
         var requestData = new Dictionary<string, string>
             {
-                { "player_uuid", uuid },
+                { "player_uuid", uuid }
             };
 
         try
         {
-            JObject? response = await SendApiRequest(_checkMessage, requestData);
-
+            JObject? response = await SendApiRequest(_discordCheckMessage, requestData);
             return DCAccount.FromJson(response!["connection_data"]!.ToObject<JObject>()!);
         }
-        catch (Exception ex)
+        catch
         {
-            TShock.Log.ConsoleError($"Error checking player ban: {ex.Message}");
+            Console.WriteLine("Error getting Discord account.");
             return null;
         }
     }
