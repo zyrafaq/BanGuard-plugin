@@ -11,6 +11,7 @@ public static class Handlers
         ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
         ServerApi.Hooks.ServerJoin.Register(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent += OnReload;
+        PlayerHooks.PlayerPermission += OnPlayerPermission;
     }
 
     public static void Dispose()
@@ -18,6 +19,7 @@ public static class Handlers
         ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
         ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent -= OnReload;
+        PlayerHooks.PlayerPermission -= OnPlayerPermission;
     }
 
     public static void Reload()
@@ -63,6 +65,24 @@ public static class Handlers
         var player = TShock.Players[args.Who];
         if (player == null) return;
 
-        player.SendInfoMessage("This server is powered by BanGuard.");
+        Task.Run(async () =>
+        {
+            DCAccount? acc = await APIService.TryGetDiscordAccount(player.UUID);
+
+            if (acc != null) player.SetDiscordAccount(acc);
+        });
+    }
+
+    private static void OnPlayerPermission(PlayerPermissionEventArgs e)
+    {
+        if (!e.Player.IsLoggedIn)
+        {
+            return;
+        }
+
+        if (e.Player.GetDiscordAccount() != null && BanGuard.Config.ConnectedPlayerPermissions.Contains(e.Permission))
+        {
+            e.Result = PermissionHookResult.Granted;
+        }
     }
 }

@@ -16,7 +16,7 @@ public static class APIService
     private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-ban");
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
-
+    private static HttpRequestMessage _discordCheckMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-connection");
 
     private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true)
     {
@@ -145,6 +145,26 @@ public static class APIService
         {
             TShock.Log.ConsoleError($"Error banning player: {ex.Message}");
             return false;
+        }
+    }
+
+    public static async Task<DCAccount?> TryGetDiscordAccount(string uuid)
+    {
+        var requestData = new Dictionary<string, string>
+            {
+                { "player_uuid", uuid },
+            };
+
+        try
+        {
+            JObject? response = await SendApiRequest(_checkMessage, requestData);
+
+            return DCAccount.FromJson(response!["connection_data"]!.ToObject<JObject>()!);
+        }
+        catch (Exception ex)
+        {
+            TShock.Log.ConsoleError($"Error checking player ban: {ex.Message}");
+            return null;
         }
     }
 }
