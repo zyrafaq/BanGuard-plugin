@@ -91,33 +91,19 @@ public static class APIService
         }
     }
 
-    public static async Task<int?> GenerateValidConnectionCode()
-    {
-        try
-        {
-            JObject? response = await SendApiRequest(_generateMessage);
-            return int.Parse(response!["code"]!.ToString());
-        }
-        catch (Exception ex)
-        {
-            TShock.Log.ConsoleError($"Error generating connection code: {ex.Message}");
-            return null;
-        }
-    }
-
     public static async Task<int?> GenerateNewConnection(string uuid, string playerName)
     {
         try
         {
-            int? code = await GenerateValidConnectionCode();
             var requestData = new Dictionary<string, string>
-                {
-                    { "code", code.ToString()!},
-                    { "uuid", uuid },
-                    { "username", playerName }
-                };
+            {
+                { "uuid", uuid },
+                { "username", playerName }
+            };
 
             JObject? response = await SendApiRequest(_newConnectionMessage, requestData);
+            var code = int.Parse(response!["code"]!.ToString()!);
+
             return code;
         }
         catch (Exception ex)
