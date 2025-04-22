@@ -144,7 +144,7 @@ public static class APIService
         try
         {
             JObject? response = await SendApiRequest(_discordCheckMessage, requestData);
-            return DCAccount.FromJson(response!["connection_data"]!.ToObject<JObject>()!);
+            return DCAccount.FromJson(response!);
         }
         catch
         {

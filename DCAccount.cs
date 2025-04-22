@@ -1,4 +1,5 @@
 using Newtonsoft.Json.Linq;
+using TShockAPI;
 
 namespace BanGuard;
 
@@ -18,7 +19,7 @@ public class DCAccount
     {
         try
         {
-            string discordName = jObject["Discord Account Name"]!.ToString();
+            string discordName = jObject["Discord username"]!.ToString();
             string discordID = jObject["Discord ID"]!.ToString();
 
             return new DCAccount(discordName, discordID);
