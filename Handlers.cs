@@ -22,30 +22,22 @@ public static class Handlers
     public static void Dispose()
     {
         ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
-        ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
         GeneralHooks.ReloadEvent -= OnReload;
+        ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
+        PlayerHooks.PlayerPermission -= OnPlayerPermission;
     }
 
     public static void Reload()
     {
-        ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
-
-        if (BanGuard.Config.EnableDiscordConnection)
-        {
-            ServerApi.Hooks.ServerJoin.Register(BanGuard.Instance, OnServerJoin);
-            PlayerHooks.PlayerPermission += OnPlayerPermission;
-        }
-        else
-        {
-            ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
-            PlayerHooks.PlayerPermission -= OnPlayerPermission;
-        }
+        Dispose();
+        Initialize();
     }
 
     private static void OnReload(ReloadEventArgs args)
     {
         BanGuard.Config = Configuration.Reload();
         APIService.Initialize();
+        Reload();
         args.Player.SendSuccessMessage("[BanGuard] Plugin has been reloaded.");
     }
 
