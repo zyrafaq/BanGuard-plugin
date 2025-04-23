@@ -60,6 +60,6 @@ public static class Commands
         }
 
         args.Player.SetDiscordAccount(acc);
-        args.Player.SendSuccessMessage($"You are linked to account {acc.DiscordName}.");
+        args.Player.SendSuccessMessage($"You are linked to {acc.DiscordName} on Discord.");
     }
 }
