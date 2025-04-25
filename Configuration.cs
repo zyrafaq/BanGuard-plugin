@@ -1,5 +1,6 @@
 using Newtonsoft.Json;
 using TShockAPI;
+using System.Collections.Generic;
 
 namespace BanGuard;
 
@@ -8,6 +9,8 @@ public class Configuration
     public static readonly string ConfigPath = Path.Combine(TShock.SavePath, "BanGuardConfig.json");
     public string APIKey = "paste_your_api_key_here";
     public bool EnableDiscordConnection = true;
+    public List<string> BadBanCategories = new List<string>();
+    // You can find the valid categories list at the discord support server
     public string[] ConnectedPlayerPermissions = { };
 
     public void Write()

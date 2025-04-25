@@ -76,9 +76,9 @@ public static class APIService
             {
                 { "player_uuid", uuid },
                 { "player_name", playerName },
-                { "player_ip", playerIP}
+                { "player_ip", playerIP },
+                { "bad_ban_categories", string.Join(",", BanGuard.Config.BadBanCategories) }
             };
-
         try
         {
             JObject? response = await SendApiRequest(_checkMessage, requestData);
