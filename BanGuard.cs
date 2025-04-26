@@ -9,7 +9,7 @@ public class BanGuard : TerrariaPlugin
     public override string Author => "BanGuard developers";
     public override string Description => "BanGuard lets Terraria admins share bans and verify accounts via Discord.";
     public override string Name => "BanGuard";
-    public override Version Version => new Version(1, 0, 0, 0);
+    public override Version Version => new Version(0, 1, 5);
     public BanGuard(Main game) : base(game) { }
     public static TerrariaPlugin Instance { get; private set; } = null!;
     public static Configuration Config = Configuration.Reload();
