@@ -10,6 +10,8 @@ version=$(cat version.txt)
 IFS='.' read -r major minor patch <<< "$version"
 new_patch=$((patch + 1))
 new_version="$major.$minor.$new_patch"
+comma_version="$major, $minor, $patch"
+comma_new_version="$major, $minor, $new_patch"
 
 echo "$new_version" > version.txt
 
@@ -18,7 +20,7 @@ if [ ! -f BanGuard.cs ]; then
     exit 1
 fi
 
-sed -i "s/$version/$new_version/g" BanGuard.cs
+sed -i "s/$comma_version/$comma_new_version/g" BanGuard.cs
 
 echo "Building project..."
 dotnet build
@@ -36,4 +38,3 @@ git push
 git push origin "$new_version"
 
 echo "Released version $new_version"
-
