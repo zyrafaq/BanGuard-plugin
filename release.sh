@@ -33,7 +33,7 @@ fi
 
 git add version.txt BanGuard.cs
 git commit -m "Release $new_version"
-git tag "$new_version"
+git tag "v$new_version"
 git push
 git push origin "$new_version"
 
