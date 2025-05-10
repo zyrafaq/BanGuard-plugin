@@ -46,24 +46,13 @@ public static class Handlers
         if (args.MsgID != PacketTypes.ContinueConnecting2) return;
 
         var player = TShock.Players[args.Msg.whoAmI];
-
         if (player == null || player.State > 1) return;
-
-        args.Handled = true;
-        int prevState = player.State;
-        player.State = 0;
 
         bool isBanned = await APIService.CheckPlayerBan(player.UUID, player.Name, player.IP) ?? false;
 
         if (isBanned)
         {
             player.Disconnect("You are banned on the BanGuard network.\nVisit https://banguard.uk for more details.");
-        }
-        else
-        {
-            args.Handled = false;
-            player.State = prevState + 1;
-            player.SendData(PacketTypes.WorldInfo);
         }
     }
 
