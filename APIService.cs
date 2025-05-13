@@ -91,14 +91,13 @@ public static class APIService
         }
     }
 
-    public static async Task<int?> GenerateNewConnection(string uuid, string playerName)
+    public static async Task<int?> GenerateNewConnection(string uuid)
     {
         try
         {
             var requestData = new Dictionary<string, string>
             {
                 { "uuid", uuid },
-                { "username", playerName }
             };
 
             JObject? response = await SendApiRequest(_newConnectionMessage, requestData);

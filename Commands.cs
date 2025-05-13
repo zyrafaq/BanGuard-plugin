@@ -34,7 +34,7 @@ public static class Commands
             return;
         }
 
-        int? code = await APIService.GenerateNewConnection(args.Player.UUID, args.Player.Name);
+        int? code = await APIService.GenerateNewConnection(args.Player.UUID);
 
         if (code != null)
         {
