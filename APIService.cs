@@ -11,7 +11,6 @@ public static class APIService
     private static string _apiKey => BanGuard.Config.APIKey;
     private static bool _isApiKeyValid = false;
     private static readonly string _rootURL = "https://banguard.uk/api/";
-    private static HttpRequestMessage _generateMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "generate-connection-code");
     private static HttpRequestMessage _newConnectionMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "new-connection-code");
     private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-ban");
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
