@@ -20,12 +20,6 @@ public static class APIService
 
     private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true)
     {
-        if (checkToken && !_isApiKeyValid)
-        {
-            TShock.Log.ConsoleError("BanGuard API key is not valid. Please check your configuration.");
-            return null;
-        }
-
         _client.DefaultRequestHeaders.Clear();
         _client.DefaultRequestHeaders.Add("Authorization", _apiKey);
 
@@ -53,6 +47,7 @@ public static class APIService
             if (!_isApiKeyValid)
             {
                 TShock.Log.ConsoleError($"Error validating BanGuard API key. Please check your configuration.");
+                Environment.Exit(0);
             }
         });
     }
