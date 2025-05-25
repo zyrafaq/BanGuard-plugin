@@ -139,9 +139,9 @@ public static class APIService
             JObject? response = await SendApiRequest(_discordCheckMessage, requestData);
             return DCAccount.FromJson(response!);
         }
-        catch
+        catch (Exception ex)
         {
-            Console.WriteLine("Error getting Discord account.");
+            TShock.Log.ConsoleError($"Error getting Discord account: {ex.Message}");
             return null;
         }
     }
