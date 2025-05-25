@@ -12,10 +12,10 @@ public static class APIService
     private static bool _isApiKeyValid = false;
     private static readonly string _rootURL = "https://banguard.uk/api/";
     private static HttpRequestMessage _newConnectionMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "new-connection-code");
-    private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-ban");
+    private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "check-player-ban");
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
-    private static HttpRequestMessage _discordCheckMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-player-connection");
+    private static HttpRequestMessage _discordCheckMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "check-player-connection");
 
     private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true)
     {
@@ -91,7 +91,7 @@ public static class APIService
         {
             var requestData = new Dictionary<string, string>
             {
-                { "uuid", uuid },
+                { "player_uuid", uuid },
             };
 
             JObject? response = await SendApiRequest(_newConnectionMessage, requestData);
@@ -110,9 +110,9 @@ public static class APIService
     {
         var requestData = new Dictionary<string, string>
             {
-                { "player", uuid },
-                { "category", category },
-                { "player_ip", ip }
+                { "player_uuid", uuid },
+                { "player_ip", ip },
+                { "category", category }
             };
 
         try
