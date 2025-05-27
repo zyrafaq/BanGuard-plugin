@@ -271,7 +271,7 @@ public static class BanService
         if (category != null)
         {
             _ = APIService.BanPlayer(player.UUID, category, player.IP);
-            player.Disconnect(($"You have been banned on the BanGuard network for {category}."));
+            player.Disconnect(($"You have been banned for {category}."));
         }
         else if (banResult?.Ban != null)
         {
