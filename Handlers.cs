@@ -51,7 +51,7 @@ public static class Handlers
 
         if (isBanned)
         {
-            player.Disconnect("You are banned.");
+            player.Disconnect("You are banned in the BanGuard network.");
         }
     }
 
