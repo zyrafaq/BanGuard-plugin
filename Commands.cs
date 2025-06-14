@@ -6,17 +6,20 @@ public static class Commands
 {
     public static void Initialize()
     {
-        TShockAPI.Commands.ChatCommands.Add(new Command("banguard.connect", ConnectCmd, "connect", "link")
+        if (BanGuard.Config.EnableDiscordConnection)
         {
-            AllowServer = false,
-            HelpText = "Generates a connection code for linking your account."
-        });
+            TShockAPI.Commands.ChatCommands.Add(new Command("banguard.connect", ConnectCmd, "connect", "link")
+            {
+                AllowServer = false,
+                HelpText = "Generates a connection code for linking your account."
+            });
 
-        TShockAPI.Commands.ChatCommands.Add(new Command("banguard.checkconnection", CheckConnectionCmd, "checkconnection")
-        {
-            AllowServer = false,
-            HelpText = "Checks if your account is linked."
-        });
+            TShockAPI.Commands.ChatCommands.Add(new Command("banguard.checkconnection", CheckConnectionCmd, "checkconnection")
+            {
+                AllowServer = false,
+                HelpText = "Checks if your account is linked."
+            });
+        }
 
         Command? banCmd = TShockAPI.Commands.ChatCommands.Find(c => c.Name == "ban");
 
