@@ -1,0 +1,11 @@
+{
+  "APIKey": "abcefghijklmnopqrstuvwxyz1234567890",
+  "EnableDiscordConnection": true,
+  "BadBanCategories": [
+    "duping"
+  ],
+  "ConnectedPlayerPermissions": [
+    "tshock.world.modify",
+    "tshock.world.editspawn"
+  ]
+}
