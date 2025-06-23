@@ -4,9 +4,12 @@ namespace BanGuard;
 
 public static class Commands
 {
+    private static bool _dcCommandsInitialized = false;
+    private static bool _banCommandReplaced = false;
+
     public static void Initialize()
     {
-        if (BanGuard.Config.EnableDiscordConnection)
+        if (BanGuard.Config.EnableDiscordConnection && !_dcCommandsInitialized)
         {
             TShockAPI.Commands.ChatCommands.Add(new Command("banguard.connect", ConnectCmd, "connect", "link")
             {
@@ -19,13 +22,34 @@ public static class Commands
                 AllowServer = false,
                 HelpText = "Checks if your account is linked."
             });
+
+            _dcCommandsInitialized = true;
+        }
+        else if (!BanGuard.Config.EnableDiscordConnection && _dcCommandsInitialized)
+        {
+            Command? dcConnectCmd = TShockAPI.Commands.ChatCommands.Find(c => c.Name == "connect");
+            Command? dcCheckCmd = TShockAPI.Commands.ChatCommands.Find(c => c.Name == "checkconnection");
+
+            if (dcConnectCmd != null)
+            {
+                Console.WriteLine($"deletin success: {TShockAPI.Commands.ChatCommands.Remove(dcConnectCmd)}");
+            }
+            if (dcCheckCmd != null)
+            {
+                TShockAPI.Commands.ChatCommands.Remove(dcCheckCmd);
+            }
+
+            _dcCommandsInitialized = false;
         }
 
-        Command? banCmd = TShockAPI.Commands.ChatCommands.Find(c => c.Name == "ban");
-
-        if (banCmd != null)
+        if (!_banCommandReplaced)
         {
-            banCmd.CommandDelegate = BanService.Ban;
+            Command? banCmd = TShockAPI.Commands.ChatCommands.Find(c => c.Name == "ban");
+
+            if (banCmd != null)
+            {
+                banCmd.CommandDelegate = BanService.Ban;
+            }
         }
     }
 

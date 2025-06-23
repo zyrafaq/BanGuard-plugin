@@ -36,6 +36,7 @@ public static class Handlers
     {
         BanGuard.Config = Configuration.Reload();
         APIService.Initialize();
+        Commands.Initialize();
         Reload();
         args.Player.SendSuccessMessage("[BanGuard] Plugin has been reloaded.");
     }
