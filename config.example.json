@@ -1,6 +1,6 @@
 {
   "APIKey": "abcefghijklmnopqrstuvwxyz1234567890",
-  "EnableDiscordConnection": true,
+  "EnableDiscordConnection": false,
   "BadBanCategories": [
     "tunneling",
     "hacks",
