@@ -2,7 +2,11 @@
   "APIKey": "abcefghijklmnopqrstuvwxyz1234567890",
   "EnableDiscordConnection": true,
   "BadBanCategories": [
-    "duping"
+    "tunneling",
+    "hacks",
+    "griefing",
+    "duping",
+    "child-safety"
   ],
   "ConnectedPlayerPermissions": [
     "tshock.world.modify",
