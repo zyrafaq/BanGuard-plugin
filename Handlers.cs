@@ -9,6 +9,7 @@ public static class Handlers
     public static void Initialize()
     {
         ServerApi.Hooks.NetGetData.Register(BanGuard.Instance, OnNetGetData);
+        ServerApi.Hooks.GamePostInitialize.Register(BanGuard.Instance, OnGamePostInitialize);
         GeneralHooks.ReloadEvent += OnReload;
 
         if (BanGuard.Config.EnableDiscordConnection)
@@ -21,6 +22,7 @@ public static class Handlers
     public static void Dispose()
     {
         ServerApi.Hooks.NetGetData.Deregister(BanGuard.Instance, OnNetGetData);
+        ServerApi.Hooks.GamePostInitialize.Deregister(BanGuard.Instance, OnGamePostInitialize);
         GeneralHooks.ReloadEvent -= OnReload;
         ServerApi.Hooks.ServerJoin.Deregister(BanGuard.Instance, OnServerJoin);
         PlayerHooks.PlayerPermission -= OnPlayerPermission;
@@ -78,4 +80,11 @@ public static class Handlers
             e.Result = PermissionHookResult.Granted;
         }
     }
+
+
+    private static void OnGamePostInitialize(EventArgs args)
+    {
+        UpdateManager.CheckUpdateVerbose(BanGuard.Instance);
+    }
+
 }
