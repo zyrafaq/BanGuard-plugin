@@ -1,3 +1,4 @@
+using BanGuard.Models;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using TShockAPI;
@@ -16,7 +17,7 @@ public static class APIService
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
     private static HttpRequestMessage _discordCheckMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "check-player-connection");
 
-    private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true)
+    private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true, bool checkSuccess = true)
     {
         _client.DefaultRequestHeaders.Clear();
         _client.DefaultRequestHeaders.Add("Authorization", _apiKey);
@@ -28,7 +29,8 @@ public static class APIService
         }
 
         HttpResponseMessage response = await _client.SendAsync(message);
-        response.EnsureSuccessStatusCode();
+
+        if (checkSuccess) response.EnsureSuccessStatusCode();
 
         var responseBody = await response.Content.ReadAsStringAsync();
         var jsonResponse = JsonConvert.DeserializeObject<JObject>(responseBody);
@@ -84,7 +86,7 @@ public static class APIService
         }
     }
 
-    public static async Task<int?> GenerateNewConnection(string uuid)
+    public static async Task<APIResponse<ConnectionCode>> GenerateNewConnection(string uuid)
     {
         try
         {
@@ -96,16 +98,17 @@ public static class APIService
             JObject? response = await SendApiRequest(_newConnectionMessage, requestData);
             var code = int.Parse(response!["code"]!.ToString()!);
 
-            return code;
+            ConnectionCode cc = ConnectionCode.FromJson(response!);
+            return new APIResponse<ConnectionCode>(true, cc);
         }
         catch (Exception ex)
         {
             TShock.Log.ConsoleError($"Error generating connection code: {ex.Message}");
-            return null;
+            return new APIResponse<ConnectionCode>(false, errorMessage: ex.Message);
         }
     }
 
-    public static async Task<bool> BanPlayer(string uuid, string category, string ip)
+    public static async Task<APIResponse<bool>> BanPlayer(string uuid, string category, string ip)
     {
         var requestData = new Dictionary<string, string>
             {
@@ -116,13 +119,18 @@ public static class APIService
 
         try
         {
-            JObject? response = await SendApiRequest(_banMessage, requestData);
-            return response != null;
+            JObject? response = await SendApiRequest(_banMessage, requestData, checkSuccess: false);
+            if (response!.ContainsKey("valid_categories"))
+            {
+                return new APIResponse<bool>(false, errorMessage: "Invalid category. Valid categories: " + string.Join(", ", response["valid_categories"]!.ToObject<List<string>>()!));
+            }
+
+            return new APIResponse<bool>(true, true);
         }
         catch (Exception ex)
         {
             TShock.Log.ConsoleError($"Error banning player: {ex.Message}");
-            return false;
+            return new APIResponse<bool>(false, errorMessage: ex.Message);
         }
     }
 

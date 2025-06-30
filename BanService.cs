@@ -270,8 +270,17 @@ public static class BanService
 
         if (category != null)
         {
-            _ = APIService.BanPlayer(player.UUID, category, player.IP);
-            player.Disconnect(($"You have been banned for {category}."));
+            Task.Run(async () =>
+            {
+                APIResponse<bool> res = await APIService.BanPlayer(player.UUID, category, player.IP);
+
+                if (!res.Success)
+                {
+                    args.Player.SendErrorMessage(res.ErrorMessage);
+                }
+            });
+
+            player.Disconnect(($"#{banResult.Ban.TicketNumber} - You have been banned: {banResult.Ban.Reason}."));
         }
         else if (banResult?.Ban != null)
         {

@@ -1,3 +1,4 @@
+using BanGuard.Models;
 using TShockAPI;
 
 namespace BanGuard;
@@ -61,13 +62,14 @@ public static class Commands
             return;
         }
 
-        int? code = await APIService.GenerateNewConnection(args.Player.UUID);
+        APIResponse<ConnectionCode> response = await APIService.GenerateNewConnection(args.Player.UUID);
 
-        if (code != null)
+        if (response.Success && response.Data != null)
         {
-            args.Player.SendSuccessMessage($"Your connection code is: {code}\n" +
+            args.Player.SendSuccessMessage($"Your connection code is: {response.Data.Code}\n" +
                 "Go to https://banguard.uk/link/ to link your account.\n" +
-                "After completing the linking process, you must rejoin the server."
+                "After completing the linking process, you must rejoin the server.\n" +
+                $"Your connection code will expire in {response.Data.DurationInMinutes} minutes."
             );
         }
         else
