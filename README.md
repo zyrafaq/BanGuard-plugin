@@ -10,6 +10,10 @@ A powerful API designed for Terraria server administrators to enhance community 
 
 To install grab the `.dll` file from the [latest release](https://github.com/BanGuard-TShock/plugin/releases/latest) and put it into the `ServerPlugins` folder in your TShock folder. Then [get a token](#how-to-get-token) and put it into the plugin configuration.
 
+## NuGet
+
+You can also download the package from [NuGet](https://www.nuget.org) [here](https://www.nuget.org/packages/BanGuard)
+
 ## Building
 
 1. Install [.NET 6 SDK](https://dotnet.microsoft.com/en-us/download/dotnet/6.0).
