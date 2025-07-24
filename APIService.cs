@@ -15,7 +15,7 @@ public static class APIService
     private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "check-player-ban");
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
-    private static HttpRequestMessage _discordCheckMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "check-player-connection");
+    private static HttpRequestMessage _getPlayerMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "get-player");
 
     private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true, bool checkSuccess = true)
     {
@@ -65,19 +65,23 @@ public static class APIService
         }
     }
 
-    public static async Task<bool?> CheckPlayerBan(string uuid, string playerName, string playerIP)
+    public static async Task<PlayerBan?> CheckPlayerBan(string uuid, string playerName, string playerIP)
     {
         var requestData = new Dictionary<string, string>
             {
                 { "player_uuid", uuid },
                 { "player_name", playerName },
                 { "player_ip", playerIP },
-                { "bad_ban_categories", string.Join(",", BanGuard.Config.BadBanCategories) }
+                { "bad_ban_categories", string.Join(",", BanGuard.Config.BadBanCategories) },
             };
         try
         {
             JObject? response = await SendApiRequest(_checkMessage, requestData);
-            return response!["banned"]!.ToObject<bool>();
+            bool isBanned = response!["banned"]!.ToObject<bool>();
+            bool isProxy = response!["check_proxy"]!.ToObject<bool>();
+            List<Dictionary<dynamic, dynamic>> bans = response!["bans"]!.ToObject<List<Dictionary<dynamic, dynamic>>>()!;
+            PlayerBan result = new PlayerBan(isBanned, isProxy, bans);
+            return result;
         }
         catch (Exception ex)
         {
@@ -143,7 +147,7 @@ public static class APIService
 
         try
         {
-            JObject? response = await SendApiRequest(_discordCheckMessage, requestData);
+            JObject? response = await SendApiRequest(_getPlayerMessage, requestData);
             return DCAccount.FromJson(response!);
         }
         catch (Exception ex)

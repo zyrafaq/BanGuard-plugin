@@ -1,3 +1,4 @@
+using BanGuard.Models;
 using TerrariaApi.Server;
 using TShockAPI;
 using TShockAPI.Hooks;
@@ -50,11 +51,31 @@ public static class Handlers
         var player = TShock.Players[args.Msg.whoAmI];
         if (player == null || player.State > 1) return;
 
-        bool isBanned = await APIService.CheckPlayerBan(player.UUID, player.Name, player.IP) ?? false;
 
-        if (isBanned)
+        PlayerBan? playerBan = await APIService.CheckPlayerBan(player.UUID, player.Name, player.IP);
+
+        if (playerBan == null)
         {
-            player.Disconnect("You are banned in the BanGuard network.");
+            return;
+        }
+
+
+        if (playerBan.IsBanned)
+        {
+            List<string> banList = new List<string>();
+
+            foreach (Dictionary<dynamic, dynamic> b in playerBan.Bans)
+            {
+                if (!banList.Contains(b["category"]))
+                {
+                    banList.Add(b["category"]);
+                }
+            }
+            player.Disconnect($"You are banned in the BanGuard network for {string.Join(",", banList)}.");
+        }
+        else if (playerBan.IsProxy && BanGuard.Config.DisallowProxyIPs)
+        {
+            player.Disconnect("Proxy or VPN detected. Please disable it to join the server.");
         }
     }
 
