@@ -1,6 +1,5 @@
 using Newtonsoft.Json;
 using TShockAPI;
-using System.Collections.Generic;
 
 namespace BanGuard;
 
