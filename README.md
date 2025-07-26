@@ -21,4 +21,4 @@ You can also download the package from [NuGet](https://www.nuget.org) [here](htt
 3. Run the `dotnet build` command.
 
 ## How to get token
-Either contact the staff team via email [here](mailto:contact@banguard.uk) or [on discord](https://discord.com/users/292672828233482250)
+Either contact the staff team via email [here](mailto:contact@banguard.uk) or [on discord](https://discord.com/users/823978430294392883)
