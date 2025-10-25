@@ -8,7 +8,7 @@ public static class UpdateManager
 {
     public static async Task<Version?> RequestLatestVersion()
     {
-        string url = "https://api.github.com/repos/BanGuard-TShock/plugin/releases/latest";
+        string url = "https://api.github.com/repos/zyrafaq/BanGuard-plugin/releases/latest";
 
         using (HttpClient client = new HttpClient())
         {
