@@ -53,17 +53,8 @@ public static class Handlers
 
         if (playerBan.IsBanned)
         {
-            List<string> banList = new List<string>();
-
-            foreach (Dictionary<dynamic, dynamic> b in playerBan.Bans)
-            {
-                if (!banList.Contains(b["category"]))
-                {
-                    banList.Add(b["category"]);
-                }
-            }
             player.Disconnect(
-                $"You are banned on the BanGuard network for {string.Join(", ", banList)}.\n" +
+                $"You are banned on the BanGuard network for {string.Join(", ", playerBan.Categories)}.\n" +
                 $"Ban {(playerBan.Bans.Count > 1 ? "IDs" : "ID")}: " +
                 $"{string.Join(", ", playerBan.Bans.Select(b => b["id"].ToString()))}"
             );

@@ -86,7 +86,8 @@ public static class APIService
                 isProxy = false;
             }
             List<Dictionary<dynamic, dynamic>> bans = response!["bans"]!.ToObject<List<Dictionary<dynamic, dynamic>>>()!;
-            PlayerBan result = new PlayerBan(isBanned, isProxy, bans);
+            List<string> banCategories = response!["ban categories"]!.ToObject<List<string>>()!;
+            PlayerBan result = new PlayerBan(isBanned, isProxy, bans, banCategories);
             return result;
         }
         catch (Exception ex)
