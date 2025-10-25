@@ -11,7 +11,6 @@ public static class APIService
     private static string _apiKey => BanGuard.Config.APIKey;
     private static bool _isApiKeyValid = false;
     private static readonly string _rootURL = "https://banguard.uk/api/";
-    private static HttpRequestMessage _newConnectionMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "new-connection-code");
     private static HttpRequestMessage _checkMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "check-player-ban");
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
@@ -90,28 +89,6 @@ public static class APIService
         }
     }
 
-    public static async Task<APIResponse<ConnectionCode>> GenerateNewConnection(string uuid)
-    {
-        try
-        {
-            var requestData = new Dictionary<string, string>
-            {
-                { "player_uuid", uuid },
-            };
-
-            JObject? response = await SendApiRequest(_newConnectionMessage, requestData);
-            var code = int.Parse(response!["code"]!.ToString()!);
-
-            ConnectionCode cc = ConnectionCode.FromJson(response!);
-            return new APIResponse<ConnectionCode>(true, cc);
-        }
-        catch (Exception ex)
-        {
-            TShock.Log.ConsoleError($"Error generating connection code: {ex.Message}");
-            return new APIResponse<ConnectionCode>(false, errorMessage: ex.Message);
-        }
-    }
-
     public static async Task<APIResponse<bool>> BanPlayer(string uuid, string category, string ip)
     {
         var requestData = new Dictionary<string, string>
@@ -135,25 +112,6 @@ public static class APIService
         {
             TShock.Log.ConsoleError($"Error banning player: {ex.Message}");
             return new APIResponse<bool>(false, errorMessage: ex.Message);
-        }
-    }
-
-    public static async Task<DCAccount?> TryGetDiscordAccount(string uuid)
-    {
-        var requestData = new Dictionary<string, string>
-            {
-                { "player_uuid", uuid }
-            };
-
-        try
-        {
-            JObject? response = await SendApiRequest(_getPlayerMessage, requestData);
-            return DCAccount.FromJson(response!);
-        }
-        catch (Exception ex)
-        {
-            TShock.Log.ConsoleError($"Error getting Discord account: {ex.Message}");
-            return null;
         }
     }
 }
