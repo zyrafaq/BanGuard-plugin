@@ -16,7 +16,7 @@ public static class APIService
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
     private static HttpRequestMessage _getPlayerMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "get-player");
 
-    private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkToken = true, bool checkSuccess = true)
+    private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkSuccess = true)
     {
         _client.DefaultRequestHeaders.Clear();
         _client.DefaultRequestHeaders.Add("Authorization", _apiKey);
@@ -55,7 +55,7 @@ public static class APIService
     {
         try
         {
-            JObject? response = await SendApiRequest(_tokenMessage, checkToken: false);
+            JObject? response = await SendApiRequest(_tokenMessage);
             return response!["valid"]!.ToObject<bool>();
         }
         catch
