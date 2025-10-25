@@ -77,7 +77,14 @@ public static class APIService
         {
             JObject? response = await SendApiRequest(_checkMessage, requestData);
             bool isBanned = response!["banned"]!.ToObject<bool>();
-            bool isProxy = response!["is_proxy"]!.ToObject<bool>();
+            bool isProxy;
+            if (playerIP != "127.0.0.1")
+            {
+                isProxy = response!["is_proxy"]!.ToObject<bool>();
+            }
+            else {
+                isProxy = false;
+            }
             List<Dictionary<dynamic, dynamic>> bans = response!["bans"]!.ToObject<List<Dictionary<dynamic, dynamic>>>()!;
             PlayerBan result = new PlayerBan(isBanned, isProxy, bans);
             return result;
