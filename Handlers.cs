@@ -63,7 +63,11 @@ public static class Handlers
                     banList.Add(b["category"]);
                 }
             }
-            player.Disconnect($"You are banned on the BanGuard network for {string.Join(", ", banList)}.");
+            player.Disconnect(
+                $"You are banned on the BanGuard network for {string.Join(", ", banList)}.\n" +
+                $"Ban {(playerBan.Bans.Count > 1 ? "IDs" : "ID")}: " +
+                $"{string.Join(", ", playerBan.Bans.Select(b => b["id"].ToString()))}"
+            );
         }
         else if (playerBan.IsProxy && BanGuard.Config.DisallowProxyIPs)
         {
