@@ -15,6 +15,7 @@ public static class APIService
     private static HttpRequestMessage _tokenMessage => new HttpRequestMessage(HttpMethod.Get, _rootURL + "check-token");
     private static HttpRequestMessage _banMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "ban-player");
     private static HttpRequestMessage _getPlayerMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "get-player");
+    private static HttpRequestMessage _getPlayerNamesMessage => new HttpRequestMessage(HttpMethod.Post, _rootURL + "get-player-names");
 
     private static async Task<JObject?> SendApiRequest(HttpRequestMessage message, Dictionary<string, string>? data = null, bool checkSuccess = true)
     {
@@ -120,6 +121,28 @@ public static class APIService
         {
             TShock.Log.ConsoleError($"Error banning player: {ex.Message}");
             return new APIResponse<bool>(false, errorMessage: ex.Message);
+        }
+    }
+
+    public static async Task<List<string>> GetPlayerNames(string uuid)
+    {
+        var requestData = new Dictionary<string, string>
+            {
+                { "player_uuid", uuid }
+            };
+
+        try
+        {
+            JObject? response = await SendApiRequest(_getPlayerNamesMessage, requestData);
+
+            List<string> playerNames = response["player_names"]!.Select(p => p["name"]!.ToString()).ToList();
+
+            return playerNames;
+        }
+        catch (Exception ex)
+        {
+            TShock.Log.ConsoleError($"Error getting player names: {ex.Message}");
+            return null;
         }
     }
 }

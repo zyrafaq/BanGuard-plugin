@@ -10,6 +10,12 @@ A powerful API designed for Terraria server administrators to enhance community 
 
 To install grab the `.dll` file from the [latest release](https://github.com/BanGuard-TShock/plugin/releases/latest) and put it into the `ServerPlugins` folder in your TShock folder. Then [get a token](#how-to-get-token) and put it into the plugin configuration.
 
+# Commands
+
+| Command          | Permission           | Description                                                |
+|------------------|----------------------|------------------------------------------------------------|
+| `getplayernames` | `banguard.listnames` | Retrieves all player names associated with a user account. |
+
 ## NuGet
 
 You can also download the package from [NuGet](https://www.nuget.org) [here](https://www.nuget.org/packages/BanGuard)
