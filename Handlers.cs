@@ -77,6 +77,7 @@ public static class Handlers
         {
             player.Disconnect("Proxy or VPN detected. Please disable it to join the server.");
         }
+        // They are free to go
     }
 
     private static void OnServerJoin(JoinEventArgs args)
