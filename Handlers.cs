@@ -51,7 +51,6 @@ public static class Handlers
             return;
         }
 
-
         if (playerBan.IsBanned)
         {
             List<string> banList = new List<string>();

@@ -11,6 +11,5 @@ public class PlayerBan
         IsBanned = isBanned;
         IsProxy = isProxy;
         Bans = bans;
-
     }
 }
