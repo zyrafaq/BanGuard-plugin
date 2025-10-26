@@ -30,7 +30,7 @@ public static class Commands
             return;
         }
 
-        List<string> playerNames = await APIService.GetPlayerNames(account.UUID);
+        List<string>? playerNames = await APIService.GetPlayerNames(account.UUID);
 
         if (playerNames == null)
         {
