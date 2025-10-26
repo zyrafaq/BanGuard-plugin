@@ -46,10 +46,7 @@ public static class Handlers
 
         PlayerBan? playerBan = await APIService.CheckPlayerBan(player.UUID, player.Name, player.IP);
 
-        if (playerBan == null)
-        {
-            return;
-        }
+        if (playerBan == null) return; // They are free to go
 
         if (playerBan.IsBanned)
         {
@@ -63,7 +60,6 @@ public static class Handlers
         {
             player.Disconnect("Proxy or VPN detected. Please disable it to join the server.");
         }
-        // They are free to go
     }
 
     private static void OnGamePostInitialize(EventArgs args)
