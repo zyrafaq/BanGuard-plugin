@@ -10,7 +10,6 @@ public class Configuration
     public bool DisallowProxyIPs = true;
     public List<string> BadBanCategories = new List<string>();
     // You can find the valid categories list at the discord support server
-    public string[] ConnectedPlayerPermissions = { };
 
     public void Write()
     {
