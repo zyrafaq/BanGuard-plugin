@@ -68,7 +68,10 @@ public static class Handlers
 
     private static void OnGamePostInitialize(EventArgs args)
     {
-        UpdateManager.CheckUpdateVerbose(BanGuard.Instance);
+        if (BanGuard.Config.CheckForUpdates)
+        {
+            UpdateManager.CheckUpdateVerbose(BanGuard.Instance);
+        }
     }
 
 }

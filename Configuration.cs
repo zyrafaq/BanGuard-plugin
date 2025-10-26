@@ -9,6 +9,7 @@ public class Configuration
     public string APIKey = "paste_your_api_key_here";
     public bool DisallowProxyIPs = true;
     public List<string> BadBanCategories = new List<string>();
+    public bool CheckForUpdates = true;
     // You can find the valid categories list at the discord support server
 
     public void Write()
