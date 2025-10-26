@@ -64,7 +64,7 @@ public static class UpdateManager
         else
         {
             TShock.Log.ConsoleError("[BanGuard] The plugin is not up to date.\n" +
-                                    "Please visit https://github.com/BanGuard-TShock/plugin/releases/latest to download the latest version.");
+                                    "Please visit https://github.com/zyrafaq/BanGuard-plugin/releases/latest to download the latest version.");
         }
     }
 }
