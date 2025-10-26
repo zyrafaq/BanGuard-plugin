@@ -124,7 +124,7 @@ public static class APIService
         }
     }
 
-    public static async Task<List<string>> GetPlayerNames(string uuid)
+    public static async Task<List<string>?> GetPlayerNames(string uuid)
     {
         var requestData = new Dictionary<string, string>
             {
@@ -135,7 +135,7 @@ public static class APIService
         {
             JObject? response = await SendApiRequest(_getPlayerNamesMessage, requestData);
 
-            List<string> playerNames = response["player_names"]!.Select(p => p["name"]!.ToString()).ToList();
+            List<string> playerNames = response!["player_names"]!.Select(p => p["name"]!.ToString()).ToList();
 
             return playerNames;
         }
