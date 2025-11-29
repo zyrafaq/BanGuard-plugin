@@ -9,7 +9,7 @@ public static class Commands
     {
         TShockAPI.Commands.ChatCommands.Add(new Command("banguard.listnames", GetPlayerNamesCmd, "getplayernames", "getplayeralts", "getalts")
         {
-            HelpText = "Generates a connection code for linking your account."
+            HelpText = "Gives a list of player names for a given account."
         });
     }
 
